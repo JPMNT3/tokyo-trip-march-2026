@@ -1,0 +1,112 @@
+[
+  {
+    "id": "n1",
+    "name": "Shibuya",
+    "nameJa": "渋谷",
+    "lat": 35.6595,
+    "lng": 139.7004,
+    "vibe": "Trendy, bustling, youth culture hub",
+    "topPicks": ["Shibuya Crossing", "Shibuya Sky", "Nintendo Tokyo", "Hachiko Statue"],
+    "description": "The beating heart of modern Tokyo. Start at the famous scramble crossing, go up Shibuya Sky for sunset views, shop in 109 and Parco."
+  },
+  {
+    "id": "n2",
+    "name": "Shinjuku",
+    "nameJa": "新宿",
+    "lat": 35.6938,
+    "lng": 139.7034,
+    "vibe": "Neon-lit entertainment district, transport hub",
+    "topPicks": ["Omoide Yokocho", "Golden Gai", "Shinjuku Gyoen", "Kabukicho"],
+    "description": "Tokyo's biggest station area. East side is neon entertainment (Kabukicho), west side is skyscrapers. Don't miss Memory Lane yakitori."
+  },
+  {
+    "id": "n3",
+    "name": "Asakusa",
+    "nameJa": "浅草",
+    "lat": 35.7148,
+    "lng": 139.7967,
+    "vibe": "Traditional, old Tokyo charm",
+    "topPicks": ["Senso-ji", "Nakamise Street", "Kimono Rental", "Sky Tree views"],
+    "description": "Old-world Tokyo at its best. Walk through Kaminarimon gate, snack on Nakamise-dori, and feel the history. Great Skytree views from the river."
+  },
+  {
+    "id": "n4",
+    "name": "Harajuku & Omotesando",
+    "nameJa": "原宿・表参道",
+    "lat": 35.6714,
+    "lng": 139.7027,
+    "vibe": "Kawaii culture meets upscale fashion",
+    "topPicks": ["Takeshita Street", "Meiji Shrine", "Cat Street", "Omotesando Hills"],
+    "description": "Takeshita Street is pure sensory overload — crepes, arcades, and wild fashion. Walk to tree-lined Omotesando for a calmer vibe."
+  },
+  {
+    "id": "n5",
+    "name": "Akihabara",
+    "nameJa": "秋葉原",
+    "lat": 35.6984,
+    "lng": 139.7731,
+    "vibe": "Geek paradise, electronics and anime",
+    "topPicks": ["Retro game shops", "Yodobashi Camera", "Maid cafes", "Gundam cafe"],
+    "description": "Otaku heaven! Multi-floor arcades, retro game shops (Super Potato!), anime figure stores, and maid cafes. Dad and kid paradise."
+  },
+  {
+    "id": "n6",
+    "name": "Ginza",
+    "nameJa": "銀座",
+    "lat": 35.6717,
+    "lng": 139.7649,
+    "vibe": "Upscale shopping, fine dining",
+    "topPicks": ["Uniqlo flagship", "Depachika food halls", "Kabuki-za theater"],
+    "description": "Tokyo's most upscale district. Even if you don't shop luxury, the architecture and department store food halls are worth a visit."
+  },
+  {
+    "id": "n7",
+    "name": "Odaiba",
+    "nameJa": "お台場",
+    "lat": 35.6267,
+    "lng": 139.7753,
+    "vibe": "Futuristic waterfront, family entertainment",
+    "topPicks": ["Gundam statue", "Joypolis", "teamLab", "Rainbow Bridge views"],
+    "description": "Man-made island with futuristic vibes. Take the Yurikamome monorail for bay views. Great half-day with kids."
+  },
+  {
+    "id": "n8",
+    "name": "Ikebukuro",
+    "nameJa": "池袋",
+    "lat": 35.7295,
+    "lng": 139.7190,
+    "vibe": "Anime, shopping, Sunshine City",
+    "topPicks": ["Pokemon Center Mega", "Sunshine Aquarium", "Animate flagship"],
+    "description": "Less touristy alternative to Akihabara for anime/manga. Sunshine City complex has the Pokemon Center, aquarium, and more."
+  },
+  {
+    "id": "n9",
+    "name": "Ueno",
+    "nameJa": "上野",
+    "lat": 35.7146,
+    "lng": 139.7745,
+    "vibe": "Museums, park, Ameyoko market",
+    "topPicks": ["Ueno Park", "National Museum", "Ameyoko market", "Zoo"],
+    "description": "Cultural district with Tokyo's best museums. Ueno Park for cherry blossoms, Ameyoko market for street food and bargains."
+  },
+  {
+    "id": "n10",
+    "name": "Hakone",
+    "nameJa": "箱根",
+    "lat": 35.2322,
+    "lng": 139.1072,
+    "vibe": "Mountain retreat, hot springs, Mt Fuji views",
+    "topPicks": ["Hakone Loop", "Owakudani", "Lake Ashi", "Ryokan"],
+    "description": "Day trip from Tokyo (90 min by train). Do the Hakone Loop: train → cable car → ropeway → pirate ship → bus. Mt Fuji views on clear days."
+  },
+  {
+    "id": "n11",
+    "name": "Shuzenji",
+    "nameJa": "修善寺",
+    "lat": 34.9722,
+    "lng": 138.9278,
+    "vibe": "Historic onsen town, bamboo groves, ryokan",
+    "topPicks": ["Yagyu-no-Sho Ryokan", "Shuzenji Temple", "Bamboo Grove", "Tokko-no-Yu"],
+    "description": "Charming hot spring town in Izu Peninsula (~2h from Tokyo via Shinkansen+Izuhakone Railway). Ancient temple, bamboo-lined paths, riverside onsen. Our ryokan night is here Mar 18-19!"
+  }
+]

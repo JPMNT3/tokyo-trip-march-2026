@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1a1a2e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Tokyo 2026</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+  <!-- App CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/leaflet-override.css">
+</head>
+<body>
+  <div id="app" v-cloak>
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-inner">
+        <div class="header-brand">
+          <span class="header-logo">東京</span>
+          <div class="header-text">
+            <h1>Tokyo</h1>
+            <span class="header-dates">14 – 22 March 2026</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Views -->
+    <div class="view-container">
+      <itinerary-view v-if="currentView === 'itinerary'" ref="itinerary"></itinerary-view>
+      <wishlist-view v-if="currentView === 'wishlist'" ref="wishlist"></wishlist-view>
+      <nearby-view v-if="currentView === 'nearby'" ref="nearby"></nearby-view>
+      <dont-miss-view v-if="currentView === 'dontmiss'" ref="dontmiss"></dont-miss-view>
+      <profile-view v-if="currentView === 'profile'" ref="profile"></profile-view>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav-bar :current="currentView" @switch="currentView = $event"></nav-bar>
+
+    <!-- Activity Modal -->
+    <activity-modal
+      v-if="modalOpen"
+      :mode="modalMode"
+      :item="modalItem"
+      :day-index="modalDayIndex"
+      @close="closeModal"
+      @save="handleModalSave"
+    ></activity-modal>
+  </div>
+
+  <!-- CDN Dependencies -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="https://unpkg.com/dexie@3/dist/dexie.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/sortablejs@1.15.0/Sortable.min.js"></script>
+
+  <!-- App Modules -->
+  <script src="js/utils/date.js"></script>
+  <script src="js/utils/geo.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/components/NavBar.js"></script>
+  <script src="js/components/ActivityCard.js"></script>
+  <script src="js/components/ActivityModal.js"></script>
+  <script src="js/components/ItineraryView.js"></script>
+  <script src="js/components/WishlistView.js"></script>
+  <script src="js/components/NearbyView.js"></script>
+  <script src="js/components/DontMissView.js"></script>
+  <script src="js/components/ProfileView.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>
