@@ -1,4 +1,4 @@
-// GPS + Leaflet map with colored pins and nearby list
+// GPS + Leaflet map with simplified markers and nearby list
 const NearbyView = {
   template: `
     <div class="nearby-view">
@@ -6,18 +6,18 @@ const NearbyView = {
       <div ref="mapContainer" class="map-container" v-show="!listOnly"></div>
 
       <!-- Fallback / list-only header -->
-      <div v-if="listOnly" style="padding:16px;text-align:center;background:var(--gray-lighter)">
-        <p style="font-size:14px;color:var(--gray)">📍 Map unavailable offline. Showing list view.</p>
+      <div v-if="listOnly" class="nearby-fallback">
+        <p>📍 Map unavailable offline. Showing list view.</p>
       </div>
 
       <!-- GPS status -->
-      <div style="padding:8px 16px;display:flex;justify-content:space-between;align-items:center;background:var(--white);border-bottom:1px solid var(--gray-light)">
-        <span style="font-size:13px;color:var(--gray)">
+      <div class="gps-status-bar">
+        <span class="gps-status-text">
           <template v-if="userPos">📍 GPS active · {{ nearbyPlaces.length }} places nearby</template>
           <template v-else-if="gpsError">⚠️ {{ gpsError }}</template>
           <template v-else>📍 Getting location...</template>
         </span>
-        <button class="filter-chip active" style="padding:4px 10px;font-size:11px" @click="centerOnUser" v-if="userPos && !listOnly">
+        <button class="gps-center-btn" @click="centerOnUser" v-if="userPos && !listOnly">
           Center
         </button>
       </div>
@@ -63,12 +63,12 @@ const NearbyView = {
       listOnly: false,
       catFilter: 'all',
       categories: [
-        { id: 'food', emoji: '🍽️', color: '#F59E0B' },
-        { id: 'culture', emoji: '⛩️', color: '#E63946' },
-        { id: 'futuristic', emoji: '🤖', color: '#8B5CF6' },
-        { id: 'kid-friendly', emoji: '🎮', color: '#3B82F6' },
-        { id: 'shopping', emoji: '🛍️', color: '#EC4899' },
-        { id: 'nature', emoji: '🌿', color: '#10B981' }
+        { id: 'food', emoji: '🍽️' },
+        { id: 'culture', emoji: '⛩️' },
+        { id: 'futuristic', emoji: '🤖' },
+        { id: 'kid-friendly', emoji: '🎮' },
+        { id: 'shopping', emoji: '🛍️' },
+        { id: 'nature', emoji: '🌿' }
       ]
     };
   },
@@ -109,7 +109,6 @@ const NearbyView = {
           maxZoom: 19
         }).addTo(this.map);
 
-        // Add all place markers
         this.updateMarkers();
       } catch (e) {
         console.warn('Map init failed, using list mode:', e);
@@ -119,7 +118,6 @@ const NearbyView = {
     },
 
     updateMarkers() {
-      // Clear existing
       this.markers.forEach(m => m.remove());
       this.markers = [];
 
@@ -131,12 +129,9 @@ const NearbyView = {
       }
 
       places.forEach(p => {
-        const cat = this.categories.find(c => c.id === p.category);
-        const color = cat?.color || '#6B7280';
-
         const icon = L.divIcon({
           className: '',
-          html: `<div class="category-marker" style="background:${color}"><span class="marker-inner">${p.imageEmoji || '📍'}</span></div>`,
+          html: `<div class="category-marker"><span class="marker-inner">${p.imageEmoji || '📍'}</span></div>`,
           iconSize: [32, 32],
           iconAnchor: [16, 32],
           popupAnchor: [0, -32]
@@ -151,10 +146,10 @@ const NearbyView = {
             <h3>${p.imageEmoji} ${p.name}</h3>
             <p>${p.nameJa || ''}</p>
             <p>${p.neighborhood} ${dist ? '· ' + dist : ''}</p>
-            <p style="font-size:11px">${p.hours || ''}</p>
-            <button class="popup-btn" style="background:var(--red);color:white"
+            <p class="place-popup-hours">${p.hours || ''}</p>
+            <button class="popup-btn popup-btn--primary"
               onclick="document.dispatchEvent(new CustomEvent('map-add-today',{detail:'${p.id}'}))">📅 Today</button>
-            <button class="popup-btn" style="background:var(--gray-lighter)"
+            <button class="popup-btn"
               onclick="document.dispatchEvent(new CustomEvent('map-add-wishlist',{detail:'${p.id}'}))">⭐ Wishlist</button>
           </div>
         `);
@@ -164,7 +159,6 @@ const NearbyView = {
     },
 
     startGPS() {
-      // Listen for map popup button clicks
       document.addEventListener('map-add-today', (e) => this.addToTodayById(e.detail));
       document.addEventListener('map-add-wishlist', (e) => this.addToWishlistById(e.detail));
 

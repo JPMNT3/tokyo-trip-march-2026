@@ -4,8 +4,8 @@
   "description": "Family trip planner for Tokyo, March 14-22 2026",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#FFF8F0",
-  "theme_color": "#1a1a2e",
+  "background_color": "#f5f5f7",
+  "theme_color": "#f5f5f7",
   "orientation": "portrait",
   "icons": [
     {

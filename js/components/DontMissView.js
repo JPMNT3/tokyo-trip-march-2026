@@ -2,13 +2,13 @@
 const DontMissView = {
   template: `
     <div class="dontmiss-view">
-      <div style="padding:16px 20px;font-size:13px;color:var(--text-tertiary);letter-spacing:0.2px">
+      <div class="dontmiss-description">
         Priority places grouped by scheduling status.
       </div>
 
       <!-- Scheduled -->
-      <div class="section-label scheduled">Scheduled ({{ scheduledItems.length }})</div>
-      <div v-if="scheduledItems.length === 0" style="padding:8px 20px;font-size:13px;color:var(--text-tertiary)">
+      <div class="section-label section-label--success">Scheduled ({{ scheduledItems.length }})</div>
+      <div v-if="scheduledItems.length === 0" class="dontmiss-empty">
         None of your must-do items are scheduled yet.
       </div>
       <div v-for="item in scheduledItems" :key="'s-'+item.place.id">
@@ -18,15 +18,15 @@ const DontMissView = {
           :show-actions="false"
           :compact="true"
         ></activity-card>
-        <div class="card-action-row" style="font-size:12px;color:var(--green);font-weight:500">
+        <div class="card-action-row overview-scheduled-info">
           {{ item.dayLabel }} · {{ item.timeSlot }}
-          <span v-if="item.status === 'done'" style="margin-left:4px">Done</span>
+          <span v-if="item.status === 'done'"> · Done</span>
         </div>
       </div>
 
       <!-- Not yet scheduled -->
-      <div class="section-label not-scheduled">⏳ Not Yet Scheduled ({{ unscheduledItems.length }})</div>
-      <div v-if="unscheduledItems.length === 0" style="padding:8px 20px;font-size:13px;color:var(--text-tertiary)">
+      <div class="section-label section-label--warning">Not Yet Scheduled ({{ unscheduledItems.length }})</div>
+      <div v-if="unscheduledItems.length === 0" class="dontmiss-empty">
         All must-do items are scheduled!
       </div>
       <div v-for="place in unscheduledItems" :key="'u-'+place.id">
@@ -56,13 +56,9 @@ const DontMissView = {
   },
   methods: {
     async loadData() {
-      // Get all priority places
       this.priorityPlaces = (await db.places.toArray()).filter(p => p.priority === true);
-
-      // Get all itinerary items
       this.itineraryItems = await db.itinerary.toArray();
 
-      // Build scheduled/unscheduled lists
       const scheduledPlaceIds = new Set();
       this.scheduledItems = [];
 

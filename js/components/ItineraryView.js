@@ -1,58 +1,111 @@
-// Day-by-day itinerary planner with drag-drop reordering
+// Day-by-day itinerary planner with drag-drop reordering and Overview
 const ItineraryView = {
   template: `
     <div class="itinerary-view">
-      <!-- Day selector strip -->
+      <!-- Day selector strip with Overview chip -->
       <div class="day-strip">
+        <button class="day-chip" :class="{ active: selectedDay === -1 }"
+          @click="selectDay(-1)">
+          <span>Overview</span>
+        </button>
         <button v-for="d in 9" :key="d-1"
           class="day-chip" :class="{ active: selectedDay === d-1, transit: isTransitDay(d-1) }"
           @click="selectDay(d-1)">
-          <span>{{ dayName(d-1) }}</span>
+          <span>{{ dayName(d-1) }}{{ isTransitDay(d-1) ? ' (transit)' : '' }}</span>
           <span class="day-date">{{ dayDateLabel(d-1) }}</span>
         </button>
       </div>
 
-      <!-- Day summary -->
-      <div class="day-summary">
-        <span class="day-title">{{ dayFullLabel(selectedDay) }}</span>
-        <span>{{ dayActivities.length }} {{ dayActivities.length === 1 ? 'activity' : 'activities' }}{{ doneCount ? ' · ' + doneCount + ' done' : '' }}</span>
-      </div>
-
-      <!-- Activity list grouped by time slot -->
-      <div v-for="slot in ['morning','afternoon','evening']" :key="slot">
-        <div class="time-slot-header" v-if="slotActivities(slot).length">
-          {{ slotEmoji(slot) }} {{ slot }}
+      <!-- OVERVIEW MODE: Priority items -->
+      <div v-if="selectedDay === -1" class="overview-section">
+        <div class="day-summary">
+          <span class="day-title">Priority Items</span>
+          <span>{{ priorityPlaces.length }} must-do</span>
         </div>
-        <div :ref="'sortable-' + slot" :data-slot="slot">
+
+        <!-- Scheduled -->
+        <div class="section-label section-label--success">Scheduled ({{ scheduledPriority.length }})</div>
+        <div v-if="scheduledPriority.length === 0" class="overview-subtitle">
+          None of your must-do items are scheduled yet.
+        </div>
+        <div v-for="item in scheduledPriority" :key="'s-'+item.place.id">
           <activity-card
-            v-for="act in slotActivities(slot)" :key="act.id"
-            :item="act"
-            :place="placesMap[act.placeId]"
-            :show-status="true"
-            :draggable="true"
-            @edit="editActivity(act)"
-            @toggle-done="toggleDone(act)"
-            @delete="deleteActivity(act)"
+            :item="{ placeId: item.place.id }"
+            :place="item.place"
+            :show-actions="false"
+            :compact="true"
           ></activity-card>
+          <div class="card-action-row overview-scheduled-info">
+            {{ item.dayLabel }} · {{ item.timeSlot }}
+            <span v-if="item.status === 'done'"> · Done</span>
+          </div>
+        </div>
+
+        <!-- Not yet scheduled -->
+        <div class="section-label section-label--warning">Not Yet Scheduled ({{ unscheduledPriority.length }})</div>
+        <div v-if="unscheduledPriority.length === 0" class="overview-subtitle">
+          All must-do items are scheduled!
+        </div>
+        <div v-for="place in unscheduledPriority" :key="'u-'+place.id">
+          <activity-card
+            :item="{ placeId: place.id }"
+            :place="place"
+            :show-actions="false"
+            :compact="true"
+          ></activity-card>
+          <div class="card-action-row">
+            <button class="card-action-btn primary" @click="schedulePriority(place)">Schedule</button>
+          </div>
         </div>
       </div>
 
-      <!-- Empty state -->
-      <div v-if="dayActivities.length === 0" class="empty-state">
-        <div class="empty-icon">📝</div>
-        <p>Nothing planned for this day yet.<br>Tap + to add an activity.</p>
-      </div>
+      <!-- DAY MODE: Normal itinerary view -->
+      <template v-if="selectedDay >= 0">
+        <!-- Day summary -->
+        <div class="day-summary">
+          <span class="day-title">{{ dayFullLabel(selectedDay) }}</span>
+          <span>{{ dayActivities.length }} {{ dayActivities.length === 1 ? 'activity' : 'activities' }}{{ doneCount ? ' · ' + doneCount + ' done' : '' }}</span>
+        </div>
 
-      <!-- FAB -->
-      <button class="fab" @click="addActivity" title="Add activity">+</button>
+        <!-- Activity list grouped by time slot -->
+        <div v-for="slot in ['morning','afternoon','evening']" :key="slot">
+          <div class="time-slot-header" v-if="slotActivities(slot).length">
+            {{ slot }}
+          </div>
+          <div :ref="'sortable-' + slot" :data-slot="slot">
+            <activity-card
+              v-for="act in slotActivities(slot)" :key="act.id"
+              :item="act"
+              :place="placesMap[act.placeId]"
+              :show-status="true"
+              :draggable="true"
+              @edit="editActivity(act)"
+              @toggle-done="toggleDone(act)"
+              @delete="deleteActivity(act)"
+            ></activity-card>
+          </div>
+        </div>
+
+        <!-- Empty state -->
+        <div v-if="dayActivities.length === 0" class="empty-state">
+          <div class="empty-icon">📝</div>
+          <p>Nothing planned for this day yet.<br>Tap + to add an activity.</p>
+        </div>
+
+        <!-- FAB -->
+        <button class="fab" @click="addActivity" title="Add activity">+</button>
+      </template>
     </div>
   `,
   data() {
     return {
-      selectedDay: 1, // Default to Day 1 (Sun Mar 15 = arrival in Tokyo)
+      selectedDay: 1,
       dayActivities: [],
       placesMap: {},
-      sortables: []
+      sortables: [],
+      priorityPlaces: [],
+      scheduledPriority: [],
+      unscheduledPriority: []
     };
   },
   computed: {
@@ -61,7 +114,6 @@ const ItineraryView = {
     }
   },
   async created() {
-    // Default to current trip day if during trip, otherwise day 1 (first Tokyo day)
     const tripDay = TripDates.currentDayIndex();
     if (tripDay >= 0) {
       this.selectedDay = tripDay;
@@ -90,7 +142,6 @@ const ItineraryView = {
       return labels[i] || TripDates.fullLabel(i);
     },
     isTransitDay(i) { return i === 0 || i === 8; },
-    slotEmoji(s) { return { morning: '🌅', afternoon: '☀️', evening: '🌙' }[s]; },
 
     async loadPlaces() {
       const places = await db.places.toArray();
@@ -100,8 +151,36 @@ const ItineraryView = {
 
     async selectDay(d) {
       this.selectedDay = d;
-      await this.loadDay();
-      this.$nextTick(() => this.initSortable());
+      if (d === -1) {
+        await this.loadOverview();
+      } else {
+        await this.loadDay();
+        this.$nextTick(() => this.initSortable());
+      }
+    },
+
+    async loadOverview() {
+      const allPlaces = await db.places.toArray();
+      this.priorityPlaces = allPlaces.filter(p => p.priority === true);
+      const itineraryItems = await db.itinerary.toArray();
+
+      const scheduledPlaceIds = new Set();
+      this.scheduledPriority = [];
+
+      for (const itin of itineraryItems) {
+        const place = this.priorityPlaces.find(p => p.id === itin.placeId);
+        if (place) {
+          scheduledPlaceIds.add(place.id);
+          this.scheduledPriority.push({
+            place,
+            dayLabel: TripDates.fullLabel(itin.dayIndex),
+            timeSlot: itin.timeSlot,
+            status: itin.status
+          });
+        }
+      }
+
+      this.unscheduledPriority = this.priorityPlaces.filter(p => !scheduledPlaceIds.has(p.id));
     },
 
     async loadDay() {
@@ -178,9 +257,17 @@ const ItineraryView = {
       await this.loadDay();
     },
 
+    schedulePriority(place) {
+      this.$root.openModal('pick-day', { placeId: place.id }, 0);
+    },
+
     async refresh() {
-      await this.loadDay();
-      this.$nextTick(() => this.initSortable());
+      if (this.selectedDay === -1) {
+        await this.loadOverview();
+      } else {
+        await this.loadDay();
+        this.$nextTick(() => this.initSortable());
+      }
     }
   }
 };

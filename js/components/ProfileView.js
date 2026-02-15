@@ -11,22 +11,22 @@ const ProfileView = {
 
       <!-- Booked items -->
       <div class="section-label">Confirmed Bookings</div>
-      <div class="member-card" style="border-left:3px solid var(--vermillion)">
-        <div class="member-emoji" style="font-size:22px">✈️</div>
+      <div class="member-card booking-card">
+        <div class="member-emoji">✈️</div>
         <div class="member-info">
           <h3>SIN → NRT · Scoot TR808</h3>
           <p>Sat 14 Mar, 23:20 → Sun 15 Mar, 07:10</p>
         </div>
       </div>
-      <div class="member-card" style="border-left:3px solid var(--vermillion)">
-        <div class="member-emoji" style="font-size:22px">♨️</div>
+      <div class="member-card booking-card">
+        <div class="member-emoji">♨️</div>
         <div class="member-info">
           <h3>Yagyu-no-Sho · Shuzenji Onsen</h3>
           <p>Wed 18 Mar 14:00 → Thu 19 Mar 11:00</p>
         </div>
       </div>
-      <div class="member-card" style="border-left:3px solid var(--vermillion)">
-        <div class="member-emoji" style="font-size:22px">✈️</div>
+      <div class="member-card booking-card">
+        <div class="member-emoji">✈️</div>
         <div class="member-info">
           <h3>NRT → SIN · NQ113</h3>
           <p>Sat 21 Mar, 21:05 → Sun 22 Mar, 03:45</p>
@@ -34,8 +34,8 @@ const ProfileView = {
       </div>
 
       <!-- Family members -->
-      <div class="section-label" style="margin-top:8px">Family</div>
-      <div style="font-size:12px;color:var(--text-tertiary);padding:0 20px 8px;letter-spacing:0.2px">Toggle members to filter activities across all views.</div>
+      <div class="section-label">Family</div>
+      <div class="profile-family-desc">Toggle members to filter activities across all views.</div>
 
       <div v-for="m in members" :key="m.id" class="member-card">
         <div class="member-emoji">{{ m.emoji }}</div>
@@ -47,34 +47,34 @@ const ProfileView = {
       </div>
 
       <!-- Trip stats -->
-      <div class="section-label" style="margin-top:8px">Statistics</div>
+      <div class="section-label">Statistics</div>
       <div class="stat-grid">
         <div class="stat-card">
-          <div class="stat-number" style="color:var(--vermillion)">{{ stats.totalPlanned }}</div>
+          <div class="stat-number">{{ stats.totalPlanned }}</div>
           <div class="stat-label">Planned</div>
         </div>
         <div class="stat-card">
-          <div class="stat-number" style="color:var(--green)">{{ stats.totalDone }}</div>
+          <div class="stat-number">{{ stats.totalDone }}</div>
           <div class="stat-label">Completed</div>
         </div>
         <div class="stat-card">
-          <div class="stat-number" style="color:var(--orange)">{{ stats.wishlistCount }}</div>
+          <div class="stat-number">{{ stats.wishlistCount }}</div>
           <div class="stat-label">Wishlist</div>
         </div>
         <div class="stat-card">
-          <div class="stat-number" style="color:var(--purple)">{{ stats.totalPlaces }}</div>
+          <div class="stat-number">{{ stats.totalPlaces }}</div>
           <div class="stat-label">Places in DB</div>
         </div>
       </div>
 
       <!-- Data management -->
-      <div class="section-label" style="margin-top:8px">Data</div>
-      <div style="padding:8px 20px;display:flex;gap:10px;flex-wrap:wrap">
+      <div class="section-label">Data</div>
+      <div class="profile-data-row">
         <button class="btn btn-secondary" @click="exportData">Export Backup</button>
-        <button class="btn btn-secondary" @click="resetData" style="color:var(--vermillion)">Reset All Data</button>
+        <button class="btn btn-secondary btn-danger" @click="resetData">Reset All Data</button>
       </div>
 
-      <div style="padding:28px 20px;text-align:center;font-size:11px;color:var(--text-tertiary);letter-spacing:0.3px">
+      <div class="profile-footer">
         Tokyo Family Trip Planner v1.0<br>
         All data stored locally on your device.
       </div>

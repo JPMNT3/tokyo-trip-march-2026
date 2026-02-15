@@ -1,4 +1,4 @@
-// Wishlist view with category/member/neighborhood filters
+// Wishlist view with merged category/member filter bar
 const WishlistView = {
   template: `
     <div class="wishlist-view">
@@ -8,7 +8,7 @@ const WishlistView = {
         <input v-model="search" placeholder="Search places...">
       </div>
 
-      <!-- Filter chips -->
+      <!-- Merged filter bar: categories + separator + members -->
       <div class="filter-bar">
         <button class="filter-chip" :class="{ active: activeFilter === 'all' }" @click="activeFilter='all'">All</button>
         <button v-for="cat in categories" :key="cat.id"
@@ -16,10 +16,7 @@ const WishlistView = {
           @click="activeFilter = cat.id">
           {{ cat.emoji }} {{ cat.label }}
         </button>
-      </div>
-
-      <!-- Member filter -->
-      <div class="filter-bar" style="padding-top:0">
+        <div class="filter-separator"></div>
         <button class="filter-chip" :class="{ active: memberFilter === 'all' }" @click="memberFilter='all'">Everyone</button>
         <button class="filter-chip" :class="{ active: memberFilter === 'dad' }" @click="memberFilter='dad'">Dad</button>
         <button class="filter-chip" :class="{ active: memberFilter === 'mom' }" @click="memberFilter='mom'">Mom</button>
@@ -68,7 +65,7 @@ const WishlistView = {
           ></activity-card>
           <div class="card-action-row">
             <button v-if="!isInWishlist(p.id)" class="card-action-btn" @click="addToWishlist(p)">Wishlist</button>
-            <button v-else class="card-action-btn" disabled style="opacity:0.4">In Wishlist</button>
+            <button v-else class="card-action-btn" disabled>In Wishlist</button>
             <button class="card-action-btn primary" @click="quickAddToItinerary(p)">Add to Day</button>
           </div>
         </div>

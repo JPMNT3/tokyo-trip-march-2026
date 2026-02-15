@@ -15,14 +15,13 @@ const ActivityModal = {
         <div v-if="mode !== 'edit'" class="form-group">
           <label>Search places</label>
           <input v-model="search" placeholder="Type to search..." @input="filterPlaces">
-          <div v-if="filteredPlaces.length" style="max-height:200px;overflow-y:auto;border:1px solid var(--gray-light);border-radius:8px;margin-top:6px">
+          <div v-if="filteredPlaces.length" class="place-search-results">
             <div v-for="p in filteredPlaces" :key="p.id"
-              style="padding:10px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--gray-lighter)"
-              :style="{ background: selectedPlaceId === p.id ? '#FEE2E2' : '' }"
+              class="place-search-item" :class="{ selected: selectedPlaceId === p.id }"
               @click="selectPlace(p)">
               <span>{{ p.imageEmoji }}</span>
-              <span style="font-size:14px">{{ p.name }}</span>
-              <span style="font-size:11px;color:var(--gray);margin-left:auto">{{ p.neighborhood }}</span>
+              <span class="place-search-name">{{ p.name }}</span>
+              <span class="place-search-hood">{{ p.neighborhood }}</span>
             </div>
           </div>
         </div>
@@ -44,7 +43,7 @@ const ActivityModal = {
         <!-- Time slot -->
         <div class="form-group">
           <label>Time of day</label>
-          <div style="display:flex;gap:8px">
+          <div class="timeslot-row">
             <button v-for="slot in ['morning','afternoon','evening']" :key="slot"
               class="filter-chip" :class="{ active: form.timeSlot === slot }"
               @click="form.timeSlot = slot">
@@ -97,10 +96,8 @@ const ActivityModal = {
     }
   },
   async created() {
-    // Load all places for search
     this.allPlaces = await db.places.toArray();
 
-    // Pre-fill form for edit mode
     if (this.mode === 'edit' && this.item) {
       this.form.dayIndex = this.item.dayIndex;
       this.form.timeSlot = this.item.timeSlot || 'morning';
@@ -111,7 +108,6 @@ const ActivityModal = {
       this.selectedPlaceId = this.item.placeId || null;
     }
 
-    // Pre-fill for pick-day mode
     if (this.mode === 'pick-day' && this.item) {
       this.selectedPlaceId = this.item.placeId || null;
       this.form.customName = this.item.customName || '';

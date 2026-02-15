@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#1a1a2e">
+  <meta name="theme-color" content="#f5f5f7">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Tokyo 2026</title>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Tokyo Trip</title>
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icons/icon-192.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icons/icon-192.svg">
@@ -14,7 +14,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -29,12 +29,9 @@
     <header class="app-header">
       <div class="header-inner">
         <div class="header-brand">
-          <span class="header-logo">東京</span>
-          <div class="header-text">
-            <h1>Tokyo</h1>
-            <span class="header-dates">14 – 22 March 2026</span>
-          </div>
+          <span class="header-title">Tokyo Trip</span>
         </div>
+        <span class="header-dates">Mar 14 – 22</span>
       </div>
     </header>
 
@@ -43,7 +40,6 @@
       <itinerary-view v-if="currentView === 'itinerary'" ref="itinerary"></itinerary-view>
       <wishlist-view v-if="currentView === 'wishlist'" ref="wishlist"></wishlist-view>
       <nearby-view v-if="currentView === 'nearby'" ref="nearby"></nearby-view>
-      <dont-miss-view v-if="currentView === 'dontmiss'" ref="dontmiss"></dont-miss-view>
       <profile-view v-if="currentView === 'profile'" ref="profile"></profile-view>
     </div>
 

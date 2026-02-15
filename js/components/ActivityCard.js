@@ -12,7 +12,7 @@ const ActivityCard = {
   emits: ['edit', 'toggle-done', 'delete', 'add-to-today', 'add-to-wishlist', 'move-to-itinerary'],
   template: `
     <div class="activity-card"
-      :class="[statusClass, accentClass, { compact }]"
+      :class="[statusClass, { compact }]"
       :data-id="item?.id">
       <div class="card-emoji">{{ displayEmoji }}</div>
       <div class="card-body">
@@ -24,16 +24,16 @@ const ActivityCard = {
         </div>
         <div v-if="item?.notes && !compact" class="card-notes">{{ item.notes }}</div>
         <div class="card-meta">
-          <span v-if="place?.category" class="card-tag" :class="'cat-' + place.category">{{ categoryLabel }}</span>
+          <span v-if="place?.category" class="card-tag">{{ categoryLabel }}</span>
           <span v-if="place?.neighborhood && place.neighborhood !== 'Transit'" class="card-tag">{{ place.neighborhood }}</span>
           <span v-if="place?.priceRange && !compact && place.priceRange !== 'Booked ✓'" class="card-tag">{{ place.priceRange }}</span>
-          <span v-if="place?.priceRange === 'Booked ✓'" class="card-tag cat-booked">Booked</span>
+          <span v-if="place?.priceRange === 'Booked ✓'" class="card-tag card-tag--booked">Booked</span>
           <span v-if="showDistance && place?._dist != null" class="card-tag">{{ formatDist(place._dist) }}</span>
-          <span v-if="place?.priority && !compact" class="card-tag" style="background:var(--vermillion-glow);color:var(--vermillion);border-color:transparent">Must do</span>
+          <span v-if="place?.priority && !compact" class="card-tag card-tag--priority">Must do</span>
         </div>
       </div>
       <div class="card-actions" v-if="showActions">
-        <button v-if="showStatus" class="card-btn" :class="{ done: item?.status === 'done' }"
+        <button v-if="showStatus" class="card-btn" :class="{ 'card-btn--done': item?.status === 'done' }"
           @click.stop="$emit('toggle-done', item)" :title="item?.status === 'done' ? 'Undo' : 'Done'">
           {{ item?.status === 'done' ? '✓' : '○' }}
         </button>
@@ -63,10 +63,6 @@ const ActivityCard = {
     statusClass() {
       if (!this.item?.status) return '';
       return 'status-' + this.item.status;
-    },
-    accentClass() {
-      if (!this.place?.category) return '';
-      return 'cat-accent-' + this.place.category;
     }
   },
   methods: {
