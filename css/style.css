@@ -9,6 +9,21 @@
   --color-accent-light: rgba(10, 132, 255, 0.08);
   --color-success: #30d158;
   --color-success-light: rgba(48, 209, 88, 0.1);
+  --color-warning: #ff9f0a;
+
+  /* Category tints — muted pastels */
+  --cat-food: #f97316;
+  --cat-food-bg: rgba(249, 115, 22, 0.08);
+  --cat-culture: #8b5cf6;
+  --cat-culture-bg: rgba(139, 92, 246, 0.08);
+  --cat-futuristic: #06b6d4;
+  --cat-futuristic-bg: rgba(6, 182, 212, 0.08);
+  --cat-kid: #f43f5e;
+  --cat-kid-bg: rgba(244, 63, 94, 0.08);
+  --cat-shopping: #ec4899;
+  --cat-shopping-bg: rgba(236, 72, 153, 0.08);
+  --cat-nature: #22c55e;
+  --cat-nature-bg: rgba(34, 197, 94, 0.08);
 
   /* Neutrals */
   --color-bg: #f5f5f7;
@@ -182,7 +197,7 @@ body {
 }
 
 .nav-item.active {
-  color: var(--color-text);
+  color: var(--color-accent);
 }
 
 .nav-item.active::after {
@@ -193,7 +208,7 @@ body {
   transform: translateX(-50%);
   width: 4px;
   height: 4px;
-  background: var(--color-text);
+  background: var(--color-accent);
   border-radius: 50%;
 }
 
@@ -231,9 +246,9 @@ body {
 .day-chip:hover { border-color: var(--color-text-tertiary); }
 
 .day-chip.active {
-  background: var(--color-primary);
+  background: var(--color-accent);
   color: var(--color-text-inverse);
-  border-color: var(--color-primary);
+  border-color: var(--color-accent);
 }
 
 .day-chip.transit {
@@ -241,7 +256,7 @@ body {
 }
 
 .day-chip.transit.active {
-  background: var(--color-primary);
+  background: var(--color-accent);
   color: var(--color-text-inverse);
 }
 
@@ -292,14 +307,24 @@ body {
 }
 
 .activity-card .card-emoji {
-  font-size: 32px;
+  font-size: 20px;
   width: 40px;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
 }
+
+/* Category-tinted emoji containers */
+.activity-card .card-emoji.cat-food { background: var(--cat-food-bg); }
+.activity-card .card-emoji.cat-culture { background: var(--cat-culture-bg); }
+.activity-card .card-emoji.cat-futuristic { background: var(--cat-futuristic-bg); }
+.activity-card .card-emoji.cat-kid-friendly { background: var(--cat-kid-bg); }
+.activity-card .card-emoji.cat-shopping { background: var(--cat-shopping-bg); }
+.activity-card .card-emoji.cat-nature { background: var(--cat-nature-bg); }
 
 .activity-card .card-body { flex: 1; min-width: 0; }
 
@@ -314,6 +339,13 @@ body {
   font-size: var(--text-xs);
   color: var(--color-text-tertiary);
   margin-top: 1px;
+}
+
+.activity-card .card-desc {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-4);
+  line-height: 1.45;
 }
 
 .activity-card .card-time {
@@ -337,7 +369,7 @@ body {
   margin-top: var(--space-8);
 }
 
-/* Card tags — all neutral */
+/* Card tags */
 .card-tag {
   font-size: 10px;
   font-weight: 500;
@@ -347,6 +379,14 @@ body {
   background: var(--color-bg);
   color: var(--color-text-secondary);
 }
+
+/* Category-colored tags */
+.card-tag.cat-tag-food { color: var(--cat-food); background: var(--cat-food-bg); }
+.card-tag.cat-tag-culture { color: var(--cat-culture); background: var(--cat-culture-bg); }
+.card-tag.cat-tag-futuristic { color: var(--cat-futuristic); background: var(--cat-futuristic-bg); }
+.card-tag.cat-tag-kid-friendly { color: var(--cat-kid); background: var(--cat-kid-bg); }
+.card-tag.cat-tag-shopping { color: var(--cat-shopping); background: var(--cat-shopping-bg); }
+.card-tag.cat-tag-nature { color: var(--cat-nature); background: var(--cat-nature-bg); }
 
 .card-tag--booked {
   background: var(--color-accent-light);
@@ -445,9 +485,9 @@ body {
 .filter-chip:hover { border-color: var(--color-text-tertiary); }
 
 .filter-chip.active {
-  background: var(--color-primary);
+  background: var(--color-accent);
   color: var(--color-text-inverse);
-  border-color: var(--color-primary);
+  border-color: var(--color-accent);
 }
 
 /* ================================================================
@@ -584,7 +624,7 @@ body {
 .btn:active { transform: scale(0.98); }
 
 .btn-primary {
-  background: var(--color-primary);
+  background: var(--color-accent);
   color: var(--color-text-inverse);
 }
 
@@ -620,7 +660,7 @@ body {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: var(--color-primary);
+  background: var(--color-accent);
   color: var(--color-text-inverse);
   border: none;
   font-size: 24px;
@@ -706,13 +746,15 @@ body {
 }
 
 .member-emoji {
-  font-size: 32px;
+  font-size: 20px;
   width: 44px;
   height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent-light);
 }
 
 .member-info { flex: 1; }
@@ -853,7 +895,7 @@ body {
   transition: color 0.15s ease;
 }
 
-.tab-btn.active { color: var(--color-text); }
+.tab-btn.active { color: var(--color-accent); }
 
 .tab-btn.active::after {
   content: '';
@@ -862,7 +904,7 @@ body {
   left: 15%;
   right: 15%;
   height: 2px;
-  background: var(--color-primary);
+  background: var(--color-accent);
   border-radius: 2px 2px 0 0;
 }
 
@@ -903,7 +945,7 @@ body {
    TRIP STATUS CARD (Profile header)
    ================================================================ */
 .trip-status-card {
-  background: var(--color-primary);
+  background: var(--color-accent);
   border-radius: var(--radius-md);
   padding: var(--space-24);
   margin: var(--space-16);
@@ -945,9 +987,9 @@ body {
 }
 
 .popup-btn--primary {
-  background: var(--color-primary);
+  background: var(--color-accent);
   color: var(--color-text-inverse);
-  border-color: var(--color-primary);
+  border-color: var(--color-accent);
 }
 
 /* ================================================================
@@ -1057,9 +1099,9 @@ body {
 }
 
 .card-action-btn.primary {
-  background: var(--color-primary);
+  background: var(--color-accent);
   color: var(--color-text-inverse);
-  border-color: var(--color-primary);
+  border-color: var(--color-accent);
 }
 
 .card-action-btn:disabled {

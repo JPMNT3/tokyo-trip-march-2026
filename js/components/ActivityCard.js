@@ -14,17 +14,18 @@ const ActivityCard = {
     <div class="activity-card"
       :class="[statusClass, { compact }]"
       :data-id="item?.id">
-      <div class="card-emoji">{{ displayEmoji }}</div>
+      <div class="card-emoji" :class="'cat-' + (place?.category || 'default')">{{ displayEmoji }}</div>
       <div class="card-body">
         <div class="card-name">{{ displayName }}</div>
         <div class="card-name-ja" v-if="place?.nameJa && !compact">{{ place.nameJa }}</div>
+        <div v-if="place?.notes && !compact" class="card-desc">{{ place.notes }}</div>
         <div v-if="item?.startTime && !compact" class="card-time">
           {{ item.startTime }}
           <span v-if="place?.duration"> · {{ place.duration }}min</span>
         </div>
         <div v-if="item?.notes && !compact" class="card-notes">{{ item.notes }}</div>
         <div class="card-meta">
-          <span v-if="place?.category" class="card-tag">{{ categoryLabel }}</span>
+          <span v-if="place?.category" class="card-tag" :class="'cat-tag-' + place.category">{{ categoryLabel }}</span>
           <span v-if="place?.neighborhood && place.neighborhood !== 'Transit'" class="card-tag">{{ place.neighborhood }}</span>
           <span v-if="place?.priceRange && !compact && place.priceRange !== 'Booked ✓'" class="card-tag">{{ place.priceRange }}</span>
           <span v-if="place?.priceRange === 'Booked ✓'" class="card-tag card-tag--booked">Booked</span>

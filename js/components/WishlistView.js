@@ -25,10 +25,10 @@ const WishlistView = {
 
       <!-- Tabs -->
       <div class="tab-bar">
-        <button class="tab-btn" :class="{ active: tab === 'wishlist' }" @click="tab='wishlist'">
-          My Wishlist ({{ wishlistItems.length }})
+        <button class="tab-btn" :class="{ active: tab === 'wishlist' }" @click="switchTab('wishlist')">
+          My Wishlist ({{ wishlistCount }})
         </button>
-        <button class="tab-btn" :class="{ active: tab === 'browse' }" @click="tab='browse'">
+        <button class="tab-btn" :class="{ active: tab === 'browse' }" @click="switchTab('browse')">
           Browse All ({{ filteredPlaces.length }})
         </button>
       </div>
@@ -84,7 +84,7 @@ const WishlistView = {
       allPlaces: [],
       wishlistItems: [],
       placesMap: {},
-      wishlistPlaceIds: new Set(),
+      wishlistPlaceIds: [],
       categories: [
         { id: 'food', emoji: '🍽️', label: 'Food' },
         { id: 'culture', emoji: '⛩️', label: 'Culture' },
@@ -96,6 +96,9 @@ const WishlistView = {
     };
   },
   computed: {
+    wishlistCount() {
+      return this.wishlistItems.length;
+    },
     filteredPlaces() {
       let list = this.allPlaces.filter(p => p.source === 'preset' && p.neighborhood !== 'Transit');
       if (this.activeFilter !== 'all') list = list.filter(p => p.category === this.activeFilter);
@@ -110,7 +113,7 @@ const WishlistView = {
       return list;
     },
     filteredWishlist() {
-      let list = this.wishlistItems;
+      let list = [...this.wishlistItems];
       if (this.activeFilter !== 'all') list = list.filter(w => this.placesMap[w.placeId]?.category === this.activeFilter);
       if (this.memberFilter !== 'all') list = list.filter(w => this.placesMap[w.placeId]?.memberFit?.includes(this.memberFilter));
       if (this.search.trim()) {
@@ -126,16 +129,25 @@ const WishlistView = {
   async created() { await this.loadData(); },
   methods: {
     async loadData() {
-      this.allPlaces = await db.places.toArray();
-      this.placesMap = {};
-      this.allPlaces.forEach(p => { this.placesMap[p.id] = p; });
-      this.wishlistItems = await db.wishlist.toArray();
-      this.wishlistPlaceIds = new Set(this.wishlistItems.map(w => w.placeId));
+      const places = await db.places.toArray();
+      const map = {};
+      places.forEach(p => { map[p.id] = p; });
+      this.allPlaces = places;
+      this.placesMap = map;
+      const items = await db.wishlist.toArray();
+      this.wishlistItems = items;
+      this.wishlistPlaceIds = items.map(w => w.placeId);
     },
-    isInWishlist(placeId) { return this.wishlistPlaceIds.has(placeId); },
+    isInWishlist(placeId) { return this.wishlistPlaceIds.includes(placeId); },
     async addToWishlist(place) {
+      const existing = await db.wishlist.where('placeId').equals(place.id).first();
+      if (existing) return;
       await db.wishlist.add({ placeId: place.id, customName: '', done: false, priority: place.priority || false, tags: place.tags || [], addedBy: 'all' });
       await this.loadData();
+    },
+    async switchTab(t) {
+      if (t === 'wishlist') await this.loadData();
+      this.tab = t;
     },
     async removeFromWishlist(wi) { await db.wishlist.delete(wi.id); await this.loadData(); },
     async markWishlistDone(wi) { await db.wishlist.update(wi.id, { done: true }); await this.loadData(); },
