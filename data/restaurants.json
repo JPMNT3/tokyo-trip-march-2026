@@ -37,7 +37,7 @@
     "url": "",
     "priority": true,
     "source": "preset",
-    "imageEmoji": "🍜"
+    "imageEmoji": "🥢"
   },
   {
     "id": "r3",
@@ -77,7 +77,7 @@
     "url": "",
     "priority": false,
     "source": "preset",
-    "imageEmoji": "🐟"
+    "imageEmoji": "🍣"
   },
   {
     "id": "r5",
@@ -217,7 +217,7 @@
     "url": "",
     "priority": false,
     "source": "preset",
-    "imageEmoji": "🐷"
+    "imageEmoji": "🍖"
   },
   {
     "id": "r12",
@@ -377,7 +377,7 @@
     "url": "",
     "priority": false,
     "source": "preset",
-    "imageEmoji": "🐟"
+    "imageEmoji": "🧧"
   },
   {
     "id": "r20",
@@ -457,7 +457,7 @@
     "url": "",
     "priority": false,
     "source": "preset",
-    "imageEmoji": "🍜"
+    "imageEmoji": "🚉"
   },
   {
     "id": "r24",
@@ -477,7 +477,7 @@
     "url": "",
     "priority": false,
     "source": "preset",
-    "imageEmoji": "🎁"
+    "imageEmoji": "🍱"
   },
   {
     "id": "r25",

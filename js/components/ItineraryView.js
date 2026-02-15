@@ -79,6 +79,7 @@ const ItineraryView = {
               :place="placesMap[act.placeId]"
               :show-status="true"
               :draggable="true"
+              :collapsible="true"
               @edit="editActivity(act)"
               @toggle-done="toggleDone(act)"
               @delete="deleteActivity(act)"

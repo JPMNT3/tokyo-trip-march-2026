@@ -61,7 +61,6 @@ const WishlistView = {
             :item="{ placeId: p.id }"
             :place="p"
             :show-actions="false"
-            :compact="true"
           ></activity-card>
           <div class="card-action-row">
             <button v-if="!isInWishlist(p.id)" class="card-action-btn" @click="addToWishlist(p)">Wishlist</button>
@@ -140,9 +139,12 @@ const WishlistView = {
     },
     isInWishlist(placeId) { return this.wishlistPlaceIds.includes(placeId); },
     async addToWishlist(place) {
+      if (this.wishlistPlaceIds.includes(place.id)) return;
+      // Optimistic update for immediate UI feedback
+      this.wishlistPlaceIds = [...this.wishlistPlaceIds, place.id];
       const existing = await db.wishlist.where('placeId').equals(place.id).first();
       if (existing) return;
-      await db.wishlist.add({ placeId: place.id, customName: '', done: false, priority: place.priority || false, tags: place.tags || [], addedBy: 'all' });
+      await db.wishlist.add({ placeId: place.id, customName: '', done: false, priority: place.priority || false, tags: [...(place.tags || [])], addedBy: 'all' });
       await this.loadData();
     },
     async switchTab(t) {

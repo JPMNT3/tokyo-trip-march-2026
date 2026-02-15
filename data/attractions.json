@@ -157,7 +157,7 @@
     "url": "https://www.ghibli-museum.jp",
     "priority": true,
     "source": "preset",
-    "imageEmoji": "🐱"
+    "imageEmoji": "🎬"
   },
   {
     "id": "a9",
@@ -237,7 +237,7 @@
     "url": "",
     "priority": true,
     "source": "preset",
-    "imageEmoji": "🚶"
+    "imageEmoji": "🏙️"
   },
   {
     "id": "a13",
@@ -317,7 +317,7 @@
     "url": "",
     "priority": false,
     "source": "preset",
-    "imageEmoji": "💯"
+    "imageEmoji": "🪙"
   },
   {
     "id": "a17",
@@ -437,7 +437,7 @@
     "url": "",
     "priority": false,
     "source": "preset",
-    "imageEmoji": "🤖"
+    "imageEmoji": "🌉"
   },
   {
     "id": "a23",
@@ -477,7 +477,7 @@
     "url": "",
     "priority": false,
     "source": "preset",
-    "imageEmoji": "📦"
+    "imageEmoji": "🎭"
   },
   {
     "id": "a25",
@@ -557,7 +557,7 @@
     "url": "",
     "priority": false,
     "source": "preset",
-    "imageEmoji": "🐱"
+    "imageEmoji": "🏘️"
   },
   {
     "id": "a29",
@@ -577,7 +577,7 @@
     "url": "",
     "priority": false,
     "source": "preset",
-    "imageEmoji": "🔬"
+    "imageEmoji": "🏗️"
   },
   {
     "id": "a30",

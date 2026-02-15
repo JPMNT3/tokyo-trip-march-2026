@@ -5,8 +5,8 @@
 :root {
   /* Colors */
   --color-primary: #1c1c1e;
-  --color-accent: #0a84ff;
-  --color-accent-light: rgba(10, 132, 255, 0.08);
+  --color-accent: #c1272d;
+  --color-accent-light: rgba(193, 39, 45, 0.07);
   --color-success: #30d158;
   --color-success-light: rgba(48, 209, 88, 0.1);
   --color-warning: #ff9f0a;
@@ -120,6 +120,18 @@ body {
 .header-brand {
   display: flex;
   align-items: center;
+  gap: var(--space-8);
+}
+
+.header-mark {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-accent);
+  background: var(--color-accent-light);
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+  line-height: 1.2;
 }
 
 .header-title {
@@ -327,6 +339,30 @@ body {
 .activity-card .card-emoji.cat-nature { background: var(--cat-nature-bg); }
 
 .activity-card .card-body { flex: 1; min-width: 0; }
+
+.activity-card.collapsible { cursor: pointer; }
+
+.activity-card .card-header-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-8);
+}
+
+.activity-card .card-time-inline {
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.activity-card .card-expand-icon {
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  flex-shrink: 0;
+  width: 20px;
+  text-align: center;
+  align-self: center;
+}
 
 .activity-card .card-name {
   font-size: var(--text-base);

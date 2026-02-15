@@ -90,7 +90,7 @@ const DontMissView = {
           customName: '',
           done: false,
           priority: true,
-          tags: place.tags || [],
+          tags: [...(place.tags || [])],
           addedBy: 'all'
         });
       }

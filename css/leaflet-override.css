@@ -16,12 +16,12 @@
   right: 10px !important;
 }
 
-/* Simplified dark marker */
+/* Simplified marker — Japanese red */
 .category-marker {
   width: 32px;
   height: 32px;
   border-radius: 50% 50% 50% 0;
-  background: #0a84ff;
+  background: #c1272d;
   transform: rotate(-45deg);
   display: flex;
   align-items: center;
@@ -42,7 +42,7 @@
   color: #aeaeb2;
 }
 
-/* User location pulse */
+/* User location pulse — keep blue for GPS dot */
 .user-location {
   width: 16px;
   height: 16px;

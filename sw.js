@@ -1,5 +1,5 @@
 // Service Worker — cache-first for app shell, network-first for map tiles
-const CACHE_NAME = 'tokyo-trip-v4';
+const CACHE_NAME = 'tokyo-trip-v6';
 const APP_SHELL = [
   './',
   './index.html',
