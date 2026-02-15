@@ -1,5 +1,5 @@
-// Service Worker — cache-first for app shell, network-first for map tiles
-const CACHE_NAME = 'tokyo-trip-v6';
+// Service Worker — network-first for app files, cache-first for CDN
+const CACHE_NAME = 'tokyo-trip-v7';
 const APP_SHELL = [
   './',
   './index.html',
@@ -43,7 +43,7 @@ self.addEventListener('install', event => {
   );
 });
 
-// Activate: clean old caches
+// Activate: clean old caches, take control immediately
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -56,7 +56,7 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
-  // Map tiles: network-first, don't cache (too many)
+  // Map tiles: network only (too many to cache)
   if (url.hostname.includes('tile.openstreetmap.org')) {
     event.respondWith(
       fetch(event.request).catch(() => caches.match(event.request))
@@ -64,22 +64,37 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Everything else: cache-first
+  // CDN resources: cache-first (they're versioned/immutable)
+  if (url.hostname === 'unpkg.com' || url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com') {
+    event.respondWith(
+      caches.match(event.request).then(cached => {
+        return cached || fetch(event.request).then(response => {
+          if (response.ok) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+          }
+          return response;
+        });
+      })
+    );
+    return;
+  }
+
+  // App files: network-first, fall back to cache for offline
   event.respondWith(
-    caches.match(event.request).then(cached => {
-      return cached || fetch(event.request).then(response => {
-        // Cache successful responses for CDN resources
-        if (response.ok && (url.hostname === 'unpkg.com')) {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
-        }
-        return response;
-      });
-    }).catch(() => {
-      // Offline fallback for navigation
-      if (event.request.mode === 'navigate') {
-        return caches.match('./index.html');
+    fetch(event.request).then(response => {
+      if (response.ok) {
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
       }
+      return response;
+    }).catch(() => {
+      return caches.match(event.request).then(cached => {
+        if (cached) return cached;
+        if (event.request.mode === 'navigate') {
+          return caches.match('./index.html');
+        }
+      });
     })
   );
 });
