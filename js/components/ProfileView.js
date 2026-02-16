@@ -19,10 +19,24 @@ const ProfileView = {
         </div>
       </div>
       <div class="member-card booking-card">
+        <div class="member-emoji">🏨</div>
+        <div class="member-info">
+          <h3>Hilton Tokyo · Shinjuku</h3>
+          <p>Sat 15 Mar → Wed 18 Mar (3 nights)</p>
+        </div>
+      </div>
+      <div class="member-card booking-card">
         <div class="member-emoji">♨️</div>
         <div class="member-info">
           <h3>Yagyu-no-Sho · Shuzenji Onsen</h3>
           <p>Wed 18 Mar 14:00 → Thu 19 Mar 11:00</p>
+        </div>
+      </div>
+      <div class="member-card booking-card">
+        <div class="member-emoji">🏨</div>
+        <div class="member-info">
+          <h3>Fairmont Hotel · Tokyo</h3>
+          <p>Thu 19 Mar → Sat 21 Mar (2 nights)</p>
         </div>
       </div>
       <div class="member-card booking-card">

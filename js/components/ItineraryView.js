@@ -131,13 +131,13 @@ const ItineraryView = {
     dayFullLabel(i) {
       const labels = {
         0: 'Departure from Singapore',
-        1: 'Arrive Tokyo — Day 1',
-        2: 'Day 2 — teamLab & Shibuya',
-        3: 'Day 3 — Akihabara & Karting',
-        4: 'Day 4 — Shuzenji Onsen',
-        5: 'Day 5 — Shuzenji → Tokyo',
-        6: 'Day 6 — Tokyo',
-        7: 'Day 7 — Last Day & Flight Home',
+        1: 'Arrive Tokyo → Hilton Shinjuku',
+        2: 'teamLab & Shibuya · Hilton',
+        3: 'Akihabara & Karting · Hilton',
+        4: 'Hilton → Shuzenji Onsen',
+        5: 'Shuzenji → Fairmont Tokyo',
+        6: 'Tokyo Explore · Fairmont',
+        7: 'Last Day · Fairmont → NRT',
         8: 'Arrive Singapore'
       };
       return labels[i] || TripDates.fullLabel(i);
