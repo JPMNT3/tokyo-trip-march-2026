@@ -40,6 +40,13 @@ const ProfileView = {
         </div>
       </div>
       <div class="member-card booking-card">
+        <div class="member-emoji">🍣</div>
+        <div class="member-info">
+          <h3>Manten Sushi · Hibiya</h3>
+          <p>Fri 20 Mar, 19:00 · Omakase dinner</p>
+        </div>
+      </div>
+      <div class="member-card booking-card">
         <div class="member-emoji">✈️</div>
         <div class="member-info">
           <h3>NRT → SIN · NQ113</h3>

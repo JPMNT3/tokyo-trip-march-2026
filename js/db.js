@@ -1,6 +1,6 @@
 // Dexie database schema + seed logic
 const db = new Dexie('TokyoTripDB');
-const SEED_VERSION = 8; // Bump this to force re-seed
+const SEED_VERSION = 9; // Bump this to force re-seed
 
 db.version(1).stores({
   places: 'id, category, neighborhood, *tags, *memberFit, priority, source',
@@ -100,7 +100,7 @@ async function seedDatabase() {
     { dayIndex: 6, placeId: 'r24', sortOrder: 2, customName: '', timeSlot: 'afternoon', startTime: '13:00', notes: 'Depachika lunch at Mitsukoshi Ginza — amazing bento, pastries, free samples!', status: 'planned' },
     { dayIndex: 6, placeId: 'a15', sortOrder: 3, customName: '', timeSlot: 'afternoon', startTime: '14:30', notes: 'Uniqlo Ginza — 12 floors! Japan-exclusive items and collabs.', status: 'planned' },
     { dayIndex: 6, placeId: 'a14', sortOrder: 4, customName: '', timeSlot: 'afternoon', startTime: '16:00', notes: 'Don Quijote for last tax-free souvenir shopping. Snacks, cosmetics, everything!', status: 'planned' },
-    { dayIndex: 6, placeId: 'r20', sortOrder: 5, customName: '', timeSlot: 'evening', startTime: '19:00', notes: 'Golden Gai — 200+ tiny bars in narrow alleys. Adults evening out (after kid sleeps?).', status: 'planned' },
+    { dayIndex: 6, placeId: 'r27', sortOrder: 5, customName: '', timeSlot: 'evening', startTime: '19:00', notes: 'BOOKED! Manten Sushi Hibiya — omakase dinner. Reservation confirmed for 19:00.', status: 'planned' },
 
     // Day 7 — Sat Mar 21: Last day, check out Fairmont → NRT
     { dayIndex: 7, placeId: null, sortOrder: 0, customName: '🏨 Check out Fairmont Hotel', timeSlot: 'morning', startTime: '10:00', notes: 'Pack everything. Check out Fairmont. Store luggage at hotel or Tokyo Station coin lockers.', status: 'planned' },
