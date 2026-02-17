@@ -1,6 +1,6 @@
 // Dexie database schema + seed logic
 const db = new Dexie('TokyoTripDB');
-const SEED_VERSION = 9; // Bump this to force re-seed
+const SEED_VERSION = 10; // Bump this to force re-seed
 
 db.version(1).stores({
   places: 'id, category, neighborhood, *tags, *memberFit, priority, source',
