@@ -542,6 +542,27 @@
     "guidePick": true
   },
   {
+    "id": "r32",
+    "name": "Yakitori Onoroke",
+    "nameJa": "焼鳥 お惚気",
+    "category": "food",
+    "neighborhood": "Shinjuku",
+    "tags": ["yakitori", "izakaya", "premium chicken", "guide-pick"],
+    "memberFit": ["dad", "mom"],
+    "lat": 35.6901,
+    "lng": 139.7052,
+    "address": "3-10-2 Shinjuku, Shinjuku-ku 2F",
+    "hours": "17:00-23:00 (LO 22:00)",
+    "priceRange": "¥3,000-5,000",
+    "duration": 75,
+    "notes": "Premium Date chicken yakitori near Shinjuku-Sanchome. Farm-fresh veg, curated wine & sake. 2min from Exit C6. Walk-in OK. Near Hilton!",
+    "url": "https://tabelog.com/en/tokyo/A1304/A130401/13309574/",
+    "priority": false,
+    "source": "preset",
+    "imageEmoji": "🍗",
+    "guidePick": true
+  },
+  {
     "id": "r28",
     "name": "Kaiten Sushi Ginza Onodera",
     "nameJa": "廻転鮨 銀座おのでら本店",
