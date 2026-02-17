@@ -436,6 +436,12 @@ body {
   font-weight: 600;
 }
 
+.card-tag--guide {
+  background: rgba(255, 159, 10, 0.1);
+  color: #e08600;
+  font-weight: 600;
+}
+
 /* Card action buttons */
 .card-actions {
   display: flex;

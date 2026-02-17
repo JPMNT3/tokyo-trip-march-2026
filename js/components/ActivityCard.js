@@ -37,6 +37,7 @@ const ActivityCard = {
             <span v-if="place?.priceRange === 'Booked ✓'" class="card-tag card-tag--booked">Booked</span>
             <span v-if="showDistance && place?._dist != null" class="card-tag">{{ formatDist(place._dist) }}</span>
             <span v-if="place?.priority" class="card-tag card-tag--priority">Must do</span>
+            <span v-if="place?.guidePick" class="card-tag card-tag--guide">Guide pick</span>
           </div>
         </template>
         <div v-else class="card-meta">
