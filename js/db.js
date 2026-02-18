@@ -1,6 +1,6 @@
 // Dexie database schema + seed logic
 const db = new Dexie('TokyoTripDB');
-const SEED_VERSION = 11; // Bump this to force re-seed
+const SEED_VERSION = 12; // Bump this to force re-seed
 
 db.version(1).stores({
   places: 'id, category, neighborhood, *tags, *memberFit, priority, source',
@@ -88,9 +88,9 @@ async function seedDatabase() {
 
     // Day 5 — Thu Mar 19: Check out Shuzenji → Fairmont Hotel [BASE: FAIRMONT]
     { dayIndex: 5, placeId: 'f11', sortOrder: 0, customName: '', timeSlot: 'morning', startTime: '07:00', notes: 'Morning onsen bath & ryokan breakfast. Savour it! CHECK OUT by 11am.', status: 'planned' },
-    { dayIndex: 5, placeId: null, sortOrder: 1, customName: '🚅 Train back to Tokyo', timeSlot: 'morning', startTime: '11:30', notes: 'Shuzenji → Mishima → Tokyo Station. ~2h. Arrive Tokyo ~1:30pm.', status: 'planned' },
-    { dayIndex: 5, placeId: null, sortOrder: 2, customName: '🏨 Check in Fairmont Hotel', timeSlot: 'afternoon', startTime: '14:00', notes: 'Check in Fairmont Hotel. Drop bags and freshen up after travel.', status: 'planned' },
-    { dayIndex: 5, placeId: 'r5', sortOrder: 3, customName: '', timeSlot: 'afternoon', startTime: '15:30', notes: 'Tsukiji Outer Market for late lunch — grilled scallops, tuna skewers, tamago. Still open afternoon!', status: 'planned' },
+    { dayIndex: 5, placeId: null, sortOrder: 1, customName: '🚅 Train back to Tokyo', timeSlot: 'morning', startTime: '11:00', notes: 'Shuzenji → Mishima → Tokyo Station. ~2h. Arrive Tokyo ~13:00.', status: 'planned' },
+    { dayIndex: 5, placeId: 'r5', sortOrder: 2, customName: '', timeSlot: 'afternoon', startTime: '13:00', notes: '🍽️ LUNCH at Tsukiji! Go straight from Tokyo Station (5min subway). Grilled scallops, tuna skewers, tamago, fresh uni. Market closes 14:00!', status: 'planned' },
+    { dayIndex: 5, placeId: null, sortOrder: 3, customName: '🏨 Check in Fairmont Hotel', timeSlot: 'afternoon', startTime: '14:30', notes: 'Check in Fairmont Hotel. Drop bags and freshen up.', status: 'planned' },
     { dayIndex: 5, placeId: 'a1', sortOrder: 4, customName: '', timeSlot: 'evening', startTime: '17:00', notes: 'Senso-ji temple at golden hour. Walk through Kaminarimon gate & Nakamise shopping street.', status: 'planned' },
     { dayIndex: 5, placeId: 'r14', sortOrder: 5, customName: '', timeSlot: 'evening', startTime: '18:30', notes: 'Matcha soft serve and melon pan snacks on Nakamise-dori.', status: 'planned' },
 
