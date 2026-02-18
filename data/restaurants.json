@@ -597,7 +597,7 @@
     "hours": "11:00-22:00",
     "priceRange": "¥1,500-3,000",
     "duration": 45,
-    "notes": "Tabelog 3.52 · Ultimate tonkatsu using premium branded pork from across Japan. Roppongi Hills location. A serious cut above regular tonkatsu chains. 473 reviews.",
+    "notes": "Tabelog 3.72 · Ultimate tonkatsu using premium branded pork from across Japan. Choose your heritage breed! Roppongi Hills location. 536 reviews.",
     "url": "https://www.butagumi.com/shokudo/",
     "priority": false,
     "source": "preset",
@@ -645,5 +645,25 @@
     "source": "preset",
     "imageEmoji": "🍱",
     "guidePick": true
+  },
+  {
+    "id": "r33",
+    "name": "Tsukiji Aozora Sandaime",
+    "nameJa": "築地 青空三代目",
+    "category": "food",
+    "neighborhood": "Tsukiji",
+    "tags": ["sushi", "omakase", "tsukiji", "top-rated"],
+    "memberFit": ["dad", "mom", "kid"],
+    "lat": 35.6651,
+    "lng": 139.7700,
+    "address": "Tsukiji 4-13-8, Trust Tsukiji KN Bldg 1F, Chuo-ku",
+    "hours": "7:00-15:00, 17:00-22:00",
+    "priceRange": "¥2,000-5,000 lunch",
+    "duration": 60,
+    "notes": "Tabelog 3.70 · 50+ year Tsukiji sushi institution with 926 reviews. Edomae technique, stellar tuna. Generous lunch sets at great value. Proper seating, family-friendly.",
+    "url": "",
+    "priority": false,
+    "source": "preset",
+    "imageEmoji": "🍣"
   }
 ]
