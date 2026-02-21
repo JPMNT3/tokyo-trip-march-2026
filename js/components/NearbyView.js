@@ -166,19 +166,12 @@ const NearbyView = {
       document.addEventListener('map-add-today', (e) => this.addToTodayById(e.detail));
       document.addEventListener('map-add-wishlist', (e) => this.addToWishlistById(e.detail));
 
-      Geo.getCurrentPosition()
-        .then(pos => {
-          this.userPos = pos;
-          this.onPositionUpdate(pos);
-        })
-        .catch(err => {
-          this.gpsError = 'Location unavailable. Showing Tokyo center.';
-          this.computeNearby(Geo.TOKYO_CENTER.lat, Geo.TOKYO_CENTER.lng);
-        });
-
       this.watchId = Geo.watchPosition(
         pos => { this.userPos = pos; this.onPositionUpdate(pos); },
-        () => {}
+        () => {
+          this.gpsError = 'Location unavailable. Showing Tokyo center.';
+          this.computeNearby(Geo.TOKYO_CENTER.lat, Geo.TOKYO_CENTER.lng);
+        }
       );
     },
 
