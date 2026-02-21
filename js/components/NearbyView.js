@@ -35,13 +35,15 @@ const NearbyView = {
       <!-- Nearby list -->
       <div class="nearby-list">
         <div v-for="p in displayPlaces" :key="p.id">
-          <activity-card
-            :item="{ placeId: p.id }"
-            :place="p"
-            :show-actions="false"
-            :show-distance="true"
-            :compact="true"
-          ></activity-card>
+          <div @click="centerOnPlace(p)" style="cursor:pointer">
+            <activity-card
+              :item="{ placeId: p.id }"
+              :place="p"
+              :show-actions="false"
+              :show-distance="true"
+              :compact="true"
+            ></activity-card>
+          </div>
           <div class="card-action-row">
             <button class="card-action-btn primary" @click="addToToday(p)">Add to Day</button>
             <button class="card-action-btn" @click="addToWishlist(p)">Wishlist</button>
@@ -204,6 +206,17 @@ const NearbyView = {
       if (this.userPos && this.map) {
         this.map.setView([this.userPos.lat, this.userPos.lng], 15);
       }
+    },
+
+    centerOnPlace(place) {
+      if (!this.map || this.listOnly) return;
+      this.map.setView([place.lat, place.lng], 16, { animate: true });
+      // Open the marker popup for this place
+      const marker = this.markers.find(m => {
+        const ll = m.getLatLng();
+        return Math.abs(ll.lat - place.lat) < 0.0001 && Math.abs(ll.lng - place.lng) < 0.0001;
+      });
+      if (marker) marker.openPopup();
     },
 
     addToToday(place) {

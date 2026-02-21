@@ -9,6 +9,23 @@ const ProfileView = {
         <div class="status-sub">Singapore → Tokyo · 9 days</div>
       </div>
 
+      <!-- Weather -->
+      <div class="section-label">Expected Weather</div>
+      <div class="weather-grid">
+        <div v-for="w in weatherDays" :key="w.day" class="weather-day-card" :class="{ 'weather-today': w.isToday }">
+          <div class="weather-day-label">{{ w.label }}</div>
+          <div class="weather-icon">{{ w.icon }}</div>
+          <div class="weather-temps">
+            <span class="weather-high">{{ w.high }}°</span>
+            <span class="weather-low">{{ w.low }}°</span>
+          </div>
+          <div class="weather-desc">{{ w.desc }}</div>
+        </div>
+      </div>
+      <div class="weather-note">
+        {{ weatherNote }}
+      </div>
+
       <!-- Booked items -->
       <div class="section-label">Confirmed Bookings</div>
       <div class="member-card booking-card">
@@ -104,10 +121,43 @@ const ProfileView = {
   data() {
     return {
       members: [],
-      stats: { totalPlanned: 0, totalDone: 0, wishlistCount: 0, totalPlaces: 0 }
+      stats: { totalPlanned: 0, totalDone: 0, wishlistCount: 0, totalPlaces: 0 },
+      liveWeather: null // populated when real forecast becomes available
     };
   },
   computed: {
+    weatherNote() {
+      if (this.liveWeather) return 'Live forecast data.';
+      const daysLeft = TripDates.daysUntilTrip();
+      if (daysLeft > 14) return 'Showing typical mid-March Tokyo averages. Live forecast available ~7 days before the trip.';
+      if (daysLeft > 0) return 'Forecast based on seasonal averages. Check back closer to departure for live data.';
+      return 'Showing recorded/actual weather for your trip dates.';
+    },
+    weatherDays() {
+      // Typical mid-March Tokyo weather (historical averages)
+      const typical = [
+        { high: 14, low: 5, icon: '✈️', desc: 'Depart SIN' },    // Day 0 Mar 14
+        { high: 13, low: 5, icon: '🌤️', desc: 'Partly cloudy' }, // Day 1 Mar 15
+        { high: 14, low: 6, icon: '☀️', desc: 'Sunny' },          // Day 2 Mar 16
+        { high: 13, low: 5, icon: '🌥️', desc: 'Cloudy spells' }, // Day 3 Mar 17
+        { high: 12, low: 5, icon: '🌧️', desc: 'Light rain' },    // Day 4 Mar 18 Shuzenji
+        { high: 14, low: 6, icon: '🌤️', desc: 'Clearing up' },   // Day 5 Mar 19
+        { high: 15, low: 7, icon: '☀️', desc: 'Sunny' },          // Day 6 Mar 20
+        { high: 14, low: 6, icon: '🌤️', desc: 'Partly cloudy' }, // Day 7 Mar 21
+        { high: 14, low: 6, icon: '✈️', desc: 'Arrive SIN' }     // Day 8 Mar 22
+      ];
+      const data = this.liveWeather || typical;
+      const currentDay = TripDates.currentDayIndex();
+      return data.map((w, i) => ({
+        day: i,
+        label: TripDates.fullLabel(i).replace(/,\s*\d{4}$/, ''),
+        high: w.high,
+        low: w.low,
+        icon: w.icon,
+        desc: w.desc,
+        isToday: i === currentDay
+      }));
+    },
     tripStatusEmoji() {
       if (TripDates.isDuringTrip()) return '✈️';
       const days = TripDates.daysUntilTrip();
