@@ -62,6 +62,8 @@ const NearbyView = {
       nearbyPlaces: [],
       markers: [],
       userMarker: null,
+      selectedMarker: null,
+      followGPS: true,
       listOnly: false,
       catFilter: 'all',
       categories: [
@@ -182,7 +184,10 @@ const NearbyView = {
 
     onPositionUpdate(pos) {
       if (this.map) {
-        this.map.setView([pos.lat, pos.lng], 15);
+        // Only re-center if following GPS (not viewing a selected place)
+        if (this.followGPS) {
+          this.map.setView([pos.lat, pos.lng], 15);
+        }
 
         if (this.userMarker) this.userMarker.remove();
         this.userMarker = L.marker([pos.lat, pos.lng], {
@@ -204,19 +209,43 @@ const NearbyView = {
 
     centerOnUser() {
       if (this.userPos && this.map) {
+        this.followGPS = true;
+        this.clearSelectedMarker();
         this.map.setView([this.userPos.lat, this.userPos.lng], 15);
       }
     },
 
     centerOnPlace(place) {
       if (!this.map || this.listOnly) return;
+      this.followGPS = false;
+      this.clearSelectedMarker();
       this.map.setView([place.lat, place.lng], 16, { animate: true });
-      // Open the marker popup for this place
+
+      // Add a flag marker for the selected place
+      this.selectedMarker = L.marker([place.lat, place.lng], {
+        icon: L.divIcon({
+          className: '',
+          html: '<div class="selected-place-flag">📍</div>',
+          iconSize: [36, 36],
+          iconAnchor: [18, 36],
+          popupAnchor: [0, -36]
+        }),
+        zIndexOffset: 1000
+      }).addTo(this.map);
+
+      // Open the existing marker popup for this place
       const marker = this.markers.find(m => {
         const ll = m.getLatLng();
         return Math.abs(ll.lat - place.lat) < 0.0001 && Math.abs(ll.lng - place.lng) < 0.0001;
       });
       if (marker) marker.openPopup();
+    },
+
+    clearSelectedMarker() {
+      if (this.selectedMarker) {
+        this.selectedMarker.remove();
+        this.selectedMarker = null;
+      }
     },
 
     addToToday(place) {
