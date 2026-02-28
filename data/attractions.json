@@ -818,5 +818,25 @@
     "priority": false,
     "source": "preset",
     "imageEmoji": "🎯"
+  },
+  {
+    "id": "a42",
+    "name": "Godzilla Head (Shinjuku Toho Building)",
+    "nameJa": "ゴジラヘッド (新宿東宝ビル)",
+    "category": "culture",
+    "neighborhood": "Shinjuku",
+    "tags": ["landmark", "photo", "free", "Kabukicho"],
+    "memberFit": ["dad", "mom", "kid"],
+    "lat": 35.6945,
+    "lng": 139.7017,
+    "address": "1-19-1 Kabukicho, Shinjuku-ku, Tokyo 160-0021",
+    "hours": "Visible from street 24h",
+    "priceRange": "free",
+    "duration": 15,
+    "notes": "12-metre life-size Godzilla head on the 8F terrace of Hotel Gracery. Best viewed from Kabukicho street below. Godzilla Store inside the building for merch. 5min walk from Shinjuku Station East Exit.",
+    "url": "",
+    "priority": false,
+    "source": "preset",
+    "imageEmoji": "🦖"
   }
 ]

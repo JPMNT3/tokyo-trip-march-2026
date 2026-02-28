@@ -1,5 +1,5 @@
 // Service Worker — network-first for app files, cache-first for CDN
-const CACHE_NAME = 'tokyo-trip-v12';
+const CACHE_NAME = 'tokyo-trip-v13';
 const APP_SHELL = [
   './',
   './index.html',
@@ -31,7 +31,9 @@ const CDN_URLS = [
   'https://unpkg.com/dexie@3/dist/dexie.js',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
-  'https://unpkg.com/sortablejs@1.15.0/Sortable.min.js'
+  'https://unpkg.com/sortablejs@1.15.0/Sortable.min.js',
+  'https://unpkg.com/rxjs@7/dist/bundles/rxjs.umd.js',
+  'https://unpkg.com/dexie-cloud-addon/dist/umd/dexie-cloud-addon.js'
 ];
 
 // Install: cache app shell + CDN dependencies
