@@ -212,7 +212,7 @@ const ItineraryView = {
           handle: '.card-emoji',
           onEnd: async (evt) => {
             const newSlot = evt.to.dataset.slot;
-            const itemId = evt.item.querySelector('.activity-card')?.dataset?.id;
+            const itemId = parseInt(evt.item.querySelector('.activity-card')?.dataset?.id);
             if (!itemId) return;
             await this.reorderAll();
             if (newSlot) {
@@ -233,7 +233,7 @@ const ItineraryView = {
         if (!container) continue;
         const cards = container.querySelectorAll('.activity-card');
         for (let i = 0; i < cards.length; i++) {
-          const id = cards[i].dataset.id;
+          const id = parseInt(cards[i].dataset.id);
           if (id) await db.itinerary.update(id, { sortOrder: i });
         }
       }

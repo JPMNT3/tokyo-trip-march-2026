@@ -1,5 +1,5 @@
 // Service Worker — network-first for app files, cache-first for CDN
-const CACHE_NAME = 'tokyo-trip-v19';
+const CACHE_NAME = 'tokyo-trip-v20';
 const APP_SHELL = [
   './',
   './index.html',
@@ -28,12 +28,10 @@ const APP_SHELL = [
 
 const CDN_URLS = [
   'https://unpkg.com/vue@3/dist/vue.global.prod.js',
-  'https://unpkg.com/dexie@4/dist/dexie.js',
+  'https://unpkg.com/dexie@3/dist/dexie.js',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
-  'https://unpkg.com/sortablejs@1.15.0/Sortable.min.js',
-  'https://unpkg.com/rxjs@7/dist/bundles/rxjs.umd.js',
-  'https://unpkg.com/dexie-cloud-addon/dist/umd/dexie-cloud-addon.js'
+  'https://unpkg.com/sortablejs@1.15.0/Sortable.min.js'
 ];
 
 // Install: cache app shell + CDN dependencies
@@ -57,11 +55,6 @@ self.addEventListener('activate', event => {
 // Fetch strategy
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
-
-  // Dexie Cloud sync: let it pass through without SW interference
-  if (url.hostname.includes('dexie.cloud')) {
-    return;
-  }
 
   // Map tiles: network only (too many to cache)
   if (url.hostname.includes('tile.openstreetmap.org')) {
