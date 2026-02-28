@@ -2,7 +2,7 @@
 const db = new Dexie('TokyoTripDB', { addons: [DexieCloud.dexieCloud] });
 const SEED_VERSION = 14; // Bump this to force re-seed (14 = cloud sync migration)
 
-db.version(1).stores({
+db.version(2).stores({
   places: 'id, category, neighborhood, *tags, *memberFit, priority, source',
   itinerary: '@id, dayIndex, placeId, sortOrder, timeSlot, status',
   wishlist: '@id, placeId, done, priority, addedBy',
@@ -17,6 +17,7 @@ db.cloud.configure({
 
 // Seed the database on first load or when seed version changes
 async function seedDatabase() {
+  try {
   const seedSetting = await db.settings.get('seedVersion');
   if (seedSetting && seedSetting.value >= SEED_VERSION) return;
 
@@ -118,4 +119,8 @@ async function seedDatabase() {
   await db.itinerary.bulkPut(itineraryItems);
 
   console.log('Database seeded:', allPlaces.length, 'places,', itineraryItems.length, 'itinerary items');
+  } catch (err) {
+    console.error('Seed failed:', err);
+    document.title = 'SEED ERROR: ' + err.message;
+  }
 }
