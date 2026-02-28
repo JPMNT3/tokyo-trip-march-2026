@@ -1,9 +1,10 @@
 // Dexie database schema + seed logic
-// Use a new DB name to avoid schema conflicts with the old pre-cloud database
 const DB_NAME = 'TokyoTripCloudDB';
 const SEED_VERSION = 14;
 
 let db;
+let dbError = null;
+
 try {
   // Delete the old pre-cloud database if it exists (one-time migration)
   if (!localStorage.getItem('migratedToCloud')) {
@@ -11,7 +12,11 @@ try {
     localStorage.setItem('migratedToCloud', '1');
   }
 
-  db = new Dexie(DB_NAME, { addons: [DexieCloud.dexieCloud] });
+  // Try with cloud addon, fall back to plain Dexie
+  const useCloud = typeof DexieCloud !== 'undefined' && DexieCloud.dexieCloud;
+  db = useCloud
+    ? new Dexie(DB_NAME, { addons: [DexieCloud.dexieCloud] })
+    : new Dexie(DB_NAME);
 
   db.version(1).stores({
     places: 'id, category, neighborhood, *tags, *memberFit, priority, source',
@@ -21,19 +26,33 @@ try {
     settings: 'key'
   });
 
-  db.cloud.configure({
-    databaseUrl: 'https://zc53qry44.dexie.cloud',
-    requireAuth: false
+  if (useCloud) {
+    db.cloud.configure({
+      databaseUrl: 'https://zc53qry44.dexie.cloud',
+      requireAuth: false
+    });
+  }
+  // Ensure table accessors exist on db object (cloud addon may not auto-create them)
+  ['places', 'itinerary', 'wishlist', 'members', 'settings'].forEach(function(name) {
+    if (!db[name]) {
+      try { db[name] = db.table(name); } catch(e) {}
+    }
   });
 } catch (err) {
+  dbError = err;
   console.error('DB init failed:', err);
-  document.title = 'DB INIT ERROR: ' + err.message;
 }
 
 // Seed the database on first load or when seed version changes
 async function seedDatabase() {
+  if (dbError) {
+    showError('DB INIT: ' + dbError.message);
+    return;
+  }
+
   try {
     await db.open();
+
     const seedSetting = await db.settings.get('seedVersion');
     if (seedSetting && seedSetting.value >= SEED_VERSION) return;
 
@@ -55,28 +74,25 @@ async function seedDatabase() {
     const allPlaces = [...attractions, ...restaurants, ...mtFuji];
     await db.places.bulkPut(allPlaces);
 
-    // Insert default family members (won't overwrite if exist)
+    // Insert default family members
     await db.members.bulkPut([
       { id: 'dad', name: 'Dad', emoji: '👨', active: true },
       { id: 'mom', name: 'Mom', emoji: '👩', active: true },
       { id: 'kid', name: 'Kid', emoji: '👦', active: true }
     ]);
 
-    // Store neighborhoods + settings (seedVersion LAST so partial seed retries)
+    // Store neighborhoods + settings
     await db.settings.put({ key: 'neighborhoods', value: neighborhoods });
     await db.settings.put({ key: 'dbSeeded', value: true });
     await db.settings.put({ key: 'gpsEnabled', value: true });
 
     // === SEED ITINERARY ===
-    // Trip: Sat Mar 14 (depart SIN) → Sun Mar 22 (arrive SIN)
-    // Day 0 = Mar 14 Sat, Day 1 = Mar 15 Sun, ... Day 8 = Mar 22 Sun
-
     const itineraryItems = [
       // Day 0 — Sat Mar 14: Depart Singapore late night
       { id: 'itin-d0-s0', dayIndex: 0, placeId: null, sortOrder: 0, customName: '🧳 Final packing & head to Changi', timeSlot: 'evening', startTime: '20:00', notes: 'Aim to reach Changi T1 by 20:30. Check in, last Singapore meal at airport.', status: 'planned' },
       { id: 'itin-d0-s1', dayIndex: 0, placeId: 't1', sortOrder: 1, customName: '', timeSlot: 'evening', startTime: '23:20', notes: '✈️ Scoot TR808 departs SIN 23:20. Red-eye to Tokyo! Try to sleep on the plane. Arrives NRT 07:10 Sun.', status: 'planned' },
 
-      // Day 1 — Sun Mar 15: Arrive NRT → Hilton Shinjuku [BASE: HILTON SHINJUKU]
+      // Day 1 — Sun Mar 15: Arrive NRT → Hilton Shinjuku
       { id: 'itin-d1-s0', dayIndex: 1, placeId: 't1', sortOrder: 0, customName: '', timeSlot: 'morning', startTime: '07:10', notes: '✈️ Land at Narita 7:10am. Immigration + bags. Buy Suica cards + Narita Express to Shinjuku (~90min).', status: 'planned' },
       { id: 'itin-d1-s1', dayIndex: 1, placeId: 'r13', sortOrder: 1, customName: '', timeSlot: 'morning', startTime: '09:30', notes: 'Grab onigiri & coffee at first konbini! Recover from red-eye.', status: 'planned' },
       { id: 'itin-d1-s2', dayIndex: 1, placeId: null, sortOrder: 2, customName: '🏨 Check in Hilton Tokyo, Shinjuku', timeSlot: 'morning', startTime: '10:30', notes: 'Drop bags at Hilton Tokyo (6-6-2 Nishi-Shinjuku). Early bag storage, room likely ready by 15:00.', status: 'planned' },
@@ -85,14 +101,14 @@ async function seedDatabase() {
       { id: 'itin-d1-s5', dayIndex: 1, placeId: 'r1', sortOrder: 5, customName: '', timeSlot: 'evening', startTime: '18:00', notes: 'Ichiran in Shibuya — first ramen in Japan! 10min train back to Hilton.', status: 'planned' },
       { id: 'itin-d1-s6', dayIndex: 1, placeId: null, sortOrder: 6, customName: '🚶 Walk to Hilton (10min from Shinjuku Stn)', timeSlot: 'evening', startTime: '19:30', notes: 'Early night — recover from red-eye. Explore Hilton area, grab drinks at hotel bar.', status: 'planned' },
 
-      // Day 2 — Mon Mar 16: teamLab + Shibuya [BASE: HILTON SHINJUKU]
+      // Day 2 — Mon Mar 16: teamLab + Shibuya
       { id: 'itin-d2-s0', dayIndex: 2, placeId: 'a4', sortOrder: 0, customName: '', timeSlot: 'morning', startTime: '10:00', notes: 'MUST DO! Book tickets in advance. Azabudai Hills (~25min from Shinjuku). Allow 2h+.', status: 'planned' },
       { id: 'itin-d2-s1', dayIndex: 2, placeId: 'r8', sortOrder: 1, customName: '', timeSlot: 'afternoon', startTime: '13:00', notes: 'Gyukatsu beef cutlet lunch in Shibuya — cook it yourself on hot stone!', status: 'planned' },
       { id: 'itin-d2-s2', dayIndex: 2, placeId: 'a23', sortOrder: 2, customName: '', timeSlot: 'afternoon', startTime: '14:30', notes: 'Nintendo Tokyo in Shibuya Parco. Exclusive Mario/Zelda/Splatoon merch!', status: 'planned' },
       { id: 'itin-d2-s3', dayIndex: 2, placeId: 'a11', sortOrder: 3, customName: '', timeSlot: 'evening', startTime: '17:30', notes: 'Shibuya Sky for sunset views. Then 1 stop back to Shinjuku/Hilton.', status: 'planned' },
       { id: 'itin-d2-s4', dayIndex: 2, placeId: 'r2', sortOrder: 4, customName: '', timeSlot: 'evening', startTime: '19:30', notes: 'Fuunji tsukemen near Shinjuku Station — walking distance to Hilton!', status: 'planned' },
 
-      // Day 3 — Tue Mar 17: Akihabara + Ikebukuro [BASE: HILTON SHINJUKU]
+      // Day 3 — Tue Mar 17: Akihabara + Ikebukuro
       { id: 'itin-d3-s0', dayIndex: 3, placeId: 'a6', sortOrder: 0, customName: '', timeSlot: 'morning', startTime: '10:00', notes: 'MUST DO! Geek paradise — arcades, retro game shops, Yodobashi Camera. ~20min from Shinjuku.', status: 'planned' },
       { id: 'itin-d3-s1', dayIndex: 3, placeId: 'r18', sortOrder: 1, customName: '', timeSlot: 'afternoon', startTime: '12:30', notes: 'Quick gyoza lunch in Akihabara', status: 'planned' },
       { id: 'itin-d3-s2', dayIndex: 3, placeId: 'a37', sortOrder: 2, customName: '', timeSlot: 'afternoon', startTime: '14:00', notes: 'Street karting from Akihabara! Dress up in costumes. Kid rides as passenger. IDP needed!', status: 'planned' },
@@ -107,7 +123,7 @@ async function seedDatabase() {
       { id: 'itin-d4-s4', dayIndex: 4, placeId: 'f14', sortOrder: 4, customName: '', timeSlot: 'afternoon', startTime: '12:30', notes: 'See Izu\'s oldest hot spring in the middle of Katsura River', status: 'planned' },
       { id: 'itin-d4-s5', dayIndex: 4, placeId: 'f11', sortOrder: 5, customName: '', timeSlot: 'afternoon', startTime: '14:00', notes: 'CHECK IN Yagyu-no-Sho. Private onsen baths, kaiseki dinner included. Pure relaxation!', status: 'planned' },
 
-      // Day 5 — Thu Mar 19: Check out Shuzenji → Fairmont Hotel [BASE: FAIRMONT]
+      // Day 5 — Thu Mar 19: Check out Shuzenji → Fairmont Hotel
       { id: 'itin-d5-s0', dayIndex: 5, placeId: 'f11', sortOrder: 0, customName: '', timeSlot: 'morning', startTime: '07:00', notes: 'Morning onsen bath & ryokan breakfast. Savour it! CHECK OUT by 11am.', status: 'planned' },
       { id: 'itin-d5-s1', dayIndex: 5, placeId: null, sortOrder: 1, customName: '🚅 Train back to Tokyo', timeSlot: 'morning', startTime: '11:00', notes: 'Shuzenji → Mishima → Tokyo Station. ~2h. Arrive Tokyo ~13:00.', status: 'planned' },
       { id: 'itin-d5-s2', dayIndex: 5, placeId: 'r5', sortOrder: 2, customName: '', timeSlot: 'afternoon', startTime: '13:00', notes: '🍽️ LUNCH at Tsukiji! Go straight from Tokyo Station (5min subway). Grilled scallops, tuna skewers, tamago, fresh uni. Market closes 14:00!', status: 'planned' },
@@ -115,7 +131,7 @@ async function seedDatabase() {
       { id: 'itin-d5-s4', dayIndex: 5, placeId: 'a1', sortOrder: 4, customName: '', timeSlot: 'evening', startTime: '17:00', notes: 'Senso-ji temple at golden hour. Walk through Kaminarimon gate & Nakamise shopping street.', status: 'planned' },
       { id: 'itin-d5-s5', dayIndex: 5, placeId: 'r14', sortOrder: 5, customName: '', timeSlot: 'evening', startTime: '18:30', notes: 'Matcha soft serve and melon pan snacks on Nakamise-dori.', status: 'planned' },
 
-      // Day 6 — Fri Mar 20: Full day Tokyo [BASE: FAIRMONT]
+      // Day 6 — Fri Mar 20: Full day Tokyo
       { id: 'itin-d6-s0', dayIndex: 6, placeId: 'a3', sortOrder: 0, customName: '', timeSlot: 'morning', startTime: '09:30', notes: 'Imperial Palace East Gardens — beautiful in March. Cherry blossoms may be starting!', status: 'planned' },
       { id: 'itin-d6-s1', dayIndex: 6, placeId: 'a17', sortOrder: 1, customName: '', timeSlot: 'morning', startTime: '11:00', notes: 'Shinjuku Gyoen — THE cherry blossom spot. Mid-March = early blooms. Japanese + English + French gardens.', status: 'planned' },
       { id: 'itin-d6-s2', dayIndex: 6, placeId: 'r24', sortOrder: 2, customName: '', timeSlot: 'afternoon', startTime: '13:00', notes: 'Depachika lunch at Mitsukoshi Ginza — amazing bento, pastries, free samples!', status: 'planned' },
@@ -130,17 +146,20 @@ async function seedDatabase() {
       { id: 'itin-d7-s3', dayIndex: 7, placeId: 't2', sortOrder: 3, customName: '', timeSlot: 'evening', startTime: '21:05', notes: 'NQ113 departs Narita 21:05. Arrives Singapore Changi 03:45 Mar 22. Sayonara Tokyo! 🇯🇵', status: 'planned' }
     ];
 
-    // Use bulkPut (upsert) so second device doesn't create duplicates via sync
     await db.itinerary.bulkPut(itineraryItems);
 
-    // Set seedVersion LAST — if anything above fails, seed retries on next load
+    // Set seedVersion LAST so partial seeds retry on next load
     await db.settings.put({ key: 'seedVersion', value: SEED_VERSION });
 
     console.log('Database seeded:', allPlaces.length, 'places,', itineraryItems.length, 'itinerary items');
   } catch (err) {
     console.error('Seed failed:', err);
-    // Show error visibly in the app header
-    var h = document.querySelector('.header-dates');
-    if (h) h.textContent = 'SEED ERR: ' + err.message;
+    showError('SEED: ' + err.message);
   }
+}
+
+function showError(msg) {
+  var h = document.querySelector('.header-dates');
+  if (h) h.textContent = msg;
+  document.title = 'ERR: ' + msg;
 }
