@@ -32,12 +32,6 @@ try {
       requireAuth: false
     });
   }
-  // Ensure table accessors exist on db object (cloud addon may not auto-create them)
-  ['places', 'itinerary', 'wishlist', 'members', 'settings'].forEach(function(name) {
-    if (!db[name]) {
-      try { db[name] = db.table(name); } catch(e) {}
-    }
-  });
 } catch (err) {
   dbError = err;
   console.error('DB init failed:', err);
@@ -52,6 +46,11 @@ async function seedDatabase() {
 
   try {
     await db.open();
+
+    // Assign table accessors AFTER open (Dexie v4 + cloud addon requires this)
+    ['places', 'itinerary', 'wishlist', 'members', 'settings'].forEach(function(name) {
+      if (!db[name]) db[name] = db.table(name);
+    });
 
     const seedSetting = await db.settings.get('seedVersion');
     if (seedSetting && seedSetting.value >= SEED_VERSION) return;
