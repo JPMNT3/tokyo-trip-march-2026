@@ -1,5 +1,5 @@
 // Service Worker — network-first for app files, cache-first for CDN
-const CACHE_NAME = 'tokyo-trip-v20';
+const CACHE_NAME = 'tokyo-trip-v21';
 const APP_SHELL = [
   './',
   './index.html',

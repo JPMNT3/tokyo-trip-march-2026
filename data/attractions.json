@@ -838,5 +838,25 @@
     "priority": false,
     "source": "preset",
     "imageEmoji": "🦖"
+  },
+  {
+    "id": "a43",
+    "name": "Omotesando Avenue",
+    "nameJa": "表参道",
+    "category": "shopping",
+    "neighborhood": "Omotesando",
+    "tags": ["avenue", "fashion", "architecture", "walking", "picked_by_Benoit"],
+    "memberFit": ["dad", "mom", "kid"],
+    "lat": 35.6651,
+    "lng": 139.7125,
+    "address": "Omotesando, Shibuya-ku / Minato-ku, Tokyo",
+    "hours": "Always (shops 10:00-20:00)",
+    "priceRange": "free (window shopping)",
+    "duration": 60,
+    "notes": "Tokyo's Champs-Elysees. Zelkova tree-lined boulevard with high-end boutiques and stunning architecture. Walk from Harajuku toward Shibuya.",
+    "url": "https://maps.app.goo.gl/gF8z6xjYUtz1UccN6",
+    "priority": false,
+    "source": "preset",
+    "imageEmoji": "🛍️"
   }
 ]
