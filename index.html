@@ -32,7 +32,7 @@
           <span class="header-mark">東京</span>
           <span class="header-title">Tokyo Trip</span>
         </div>
-        <span class="header-dates">Mar 14 – 22 · <small style="opacity:0.4">v21</small></span>
+        <span class="header-dates">Mar 14 – 22 · <small style="opacity:0.4">v22</small></span>
       </div>
     </header>
 
@@ -81,6 +81,7 @@
   <!-- Service Worker Registration -->
   <script>
     if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.addEventListener('controllerchange', () => location.reload());
       navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' })
         .then(reg => reg.update())
         .catch(() => {});

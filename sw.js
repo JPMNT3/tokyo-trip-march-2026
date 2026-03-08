@@ -1,5 +1,5 @@
 // Service Worker — network-first for app files, cache-first for CDN
-const CACHE_NAME = 'tokyo-trip-v21';
+const CACHE_NAME = 'tokyo-trip-v22';
 const APP_SHELL = [
   './',
   './index.html',
@@ -82,7 +82,7 @@ self.addEventListener('fetch', event => {
 
   // App files: network-first, fall back to cache for offline
   event.respondWith(
-    fetch(event.request).then(response => {
+    fetch(event.request, { cache: 'no-store' }).then(response => {
       if (response.ok) {
         const clone = response.clone();
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
